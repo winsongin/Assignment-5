@@ -1,5 +1,5 @@
-// Name
-// Section #
+// Name: Winson Gin
+// Section #3
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -30,8 +30,11 @@ void readBooks(vector<Book *> & myBooks) {
   string author;
   string category;
   int count = 0;
-  Book* bookPtr;
+  Book* bookPtr = nullptr;
 
+  if(!file){
+    cout << "Error: Could not open file" << endl;
+  }
 
   while(file >> bookID){
     getline(file, title);
@@ -42,8 +45,6 @@ void readBooks(vector<Book *> & myBooks) {
   }
 
   file.close();
-  delete bookPtr;
-  bookPtr = NULL;
 }
 
 int readPersons(vector<Person *> & myCardholders) {
@@ -55,8 +56,11 @@ int readPersons(vector<Person *> & myCardholders) {
   bool isActive = false;
   string fName;
   string lName;
-  Person* personPtr;
+  Person* personPtr = nullptr;
 
+  if(!file){
+    cout << "Error: Could not open file" << endl;
+  }
 
   while(file >> cardID){
     file >> isActive;
@@ -70,16 +74,26 @@ int readPersons(vector<Person *> & myCardholders) {
   file.close();
   lastCardID += 1;
   return lastCardID;
-  delete personPtr;
-  personPtr = NULL;
 }
 
 void readRentals(vector<Book *> & myBooks, vector<Person *> myCardholders) {
   ifstream file;
   file.open("rentals.txt");
+  Book* bookPtr;
+  Person* personPtr = nullptr;
 
   int bookID;
   int cardID;
+
+  if(!file){
+    cout << "Error: Could not open file" << endl;
+  }
+
+  while(file >> bookID >> cardID){
+    bookPtr = searchBook(myBooks, bookID);
+    personPtr = searchPerson(myCardHolders, cardID);
+    (*bookPtr).setPersonPtr(personPtr);
+  }
 
 
 }
@@ -101,9 +115,28 @@ void openCard(vector<Person *> & myCardholders, int nextID) {
   delete P;
 }
 
-Book * searchBook(vector<Book *> myBooks, int id) {
+Book * searchBook(vector<Book *> myBooks, int bookID) {
+  Book* bookPtr = nullptr;
 
-  return nullptr;
+  for(int i = 0; i < myBooks.size(); i++){
+    if(*myBooks).at(i).getId() == bookID){
+      bookPtr = myBooks.at(i);
+    }
+  }
+
+  return bookPtr;
+}
+
+Person * searchPerson(vector<Person *> myCardHolders, int cardID) {
+  Person* personPtr = nullptr;
+
+  for(int i = 0; i < myCardHolders.size(); i++){
+    if(*myCardHolders).at(i).getId() == cardID){
+      personPtr = myCardHolders.at(i);
+    }
+  }
+
+  return personPtr;
 }
 
 
@@ -111,6 +144,11 @@ int main()
 {
     vector<Book *> books;
     vector<Person *> cardholders;
+    int cardID;
+    int bookID;
+    int count = 0;
+    Person* personPtr;
+    Book* bookPtr;
 
     int choice;
     do
@@ -123,22 +161,93 @@ int main()
         {
             case 1:
                 // Book checkout
+                cout << "Please enter the card id: ";
+                cin >> cardID;
+                personPtr = searchPerson(cardHolders, cardID);
+                if(personPtr = nullptr || (!(*personPtr).isActive())){
+                  cout << "Card ID not found" << endl;
+                }
+                else{
+                  cout << "Cardholder: " << (*personPtr).fullName();
+                  cout << "Please enter the book id: ";
+                  cin >> bookID;
+                  bookPtr = searchBook(books, bookID);
+                  if(bookPtr == nullptr){
+                    cout << "Book ID not found" << endl;
+                  }
+                  else{
+                    cout << "Title: " << (*bookPtr).getTitle();
+                    bookPtr = searchBook(myBooks, bookID);
+                    personPtr = searchPerson(myCardHolders, cardID);
+                    (*bookPtr).setPersonPtr(personPtr);
+                    cout << "Rental completed" << endl;
+                  }
+                }
+
                 break;
 
             case 2:
                 // Book return
+                cout << "Please enter the book ID to return: ";
+                cin >> bookID;
+                bookPtr = searchBook(books, bookID);
+                if(bookPtr == nullptr){
+                  cout << "Book ID not found" << endl;
+                }
+                else{
+                  cout << "Title: " << (*bookPtr).getTitle() << endl;
+                  (*bookPtr).setPersonPtr(nullptr);
+                }
+                //Update book object
                 break;
 
             case 3:
                 // View all available books
+                for(int i = 0; i < books.size(); i++){
+                  if((*bookPtr).at(i).getPersonPtr() == nullptr){
+                    cout << "Book ID: " << (*books).at(i).getId();
+                    cout << "Title: " << (*books).at(i).getTitle();
+                    cout << "Author: " << (*books).at(i).getAuthor();
+                    cout << "Category: " << (*books).at(i).getCategory();
+                    cout << endl;
+                  }
+                  else{
+                    count++;
+                  }
+                }
+                if(count == books.size()){
+                  cout << "No available books" << endl;
+                }
                 break;
 
             case 4:
                 // View all outstanding rentals
+                for(int i = 0; i < books.size(); i++){
+                  if((*bookPtr).getPersonPtr() != nullptr){
+                    cout << "Book ID: " << (*bookPtr).at(i).getId();
+                    cout << "Title: " << (*bookPtr).at(i).getTitle();
+                    cout << "Author: " << (*bookPtr).at(i).getAuthor();
+                    cout << "Category: " << (*bookPtr).at(i).getCategory();
+                    cout << "Cardholder: " << (*bookPtr).at(i).(*getPersonPtr()).at(i).fullName();
+                    cout << "Card ID: " << (*bookPtr).at(i).(*getPersonPtr()).at(i).getId();
+                    cout << endl;
+                  }
+                  else{
+                    count++;
+                  }
+                }
+                if(count == books.size()){
+                  cout << "No outstanding rentals" << endl;
+                }
                 break;
 
             case 5:
                 // View outstanding rentals for a cardholder
+                cout << "Please enter the card ID: ";
+                cin >> cardID;
+                for(int i = 0; i < books.size(); i++){
+
+                }
                 break;
 
             case 6:

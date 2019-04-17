@@ -1,3 +1,5 @@
+//Winson Gin
+//Section #3
 #include "book.h"
 
 Book::Book(int id, string bookName, string auth, string cat) {
@@ -25,8 +27,8 @@ int Book::getId() {
 }
 void Book::setPersonPtr(Person * ptr) {
   personPtr = ptr;
-} 
+}
 
 Person * Book::getPersonPtr() {
-    return nullptr; // complete
+    return personPtr; // complete
 }

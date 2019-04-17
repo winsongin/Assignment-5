@@ -1,3 +1,6 @@
+//Winson Gin
+//Section #3
+
 //begin book.h
 #ifndef BOOK_H
 #define BOOK_H

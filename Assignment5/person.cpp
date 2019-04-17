@@ -1,3 +1,6 @@
+//Winson Gin
+//Section #3
+
 #include "person.h"
 
 Person::Person(int cardNo, bool act, string fName, string lName) {
