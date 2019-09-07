@@ -1,10 +1,6 @@
 // Name: Winson Gin
 // Section #2
 
-// Known logical errors:
-// 1. Rentals wiped out the initial rentals after writing to the file,
-// 2. When opening new card multiple times, the nextID is not being incremented
-
 #include <iostream>
 #include <fstream>
 #include <string>
